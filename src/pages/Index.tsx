@@ -3,38 +3,68 @@ import { useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
 import { SwipeableContainer } from "@/components/SwipeableContainer";
 
-// Temporary mock data until Supabase is connected
+// Expanded mock data with diverse topics
 const MOCK_TWEETS = [
   {
     id: "1",
     author: {
-      name: "John Doe",
-      handle: "johndoe",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+      name: "AI Enthusiast",
+      handle: "aifuture",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=AI",
     },
-    content: "Just setting up my Twitter clone!",
+    content: "ChatGPT just helped me solve a complex coding problem in seconds! The future of AI is here and it's amazing. #AI #Technology",
     timestamp: "2m",
   },
   {
     id: "2",
     author: {
-      name: "Jane Smith",
-      handle: "janesmith",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane",
+      name: "Robot Builder",
+      handle: "robotmaster",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robot",
     },
-    content: "This horizontal swipe feature is pretty cool!",
+    content: "Just finished building my first autonomous robot! The robotics competition is going to be epic this year. #Robotics #Engineering",
     timestamp: "5m",
   },
   {
     id: "3",
     author: {
-      name: "Bob Wilson",
-      handle: "bobwilson",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+      name: "Football Expert",
+      handle: "soccerpro",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Football",
     },
-    content: "Can't wait to see this connected to Supabase!",
+    content: "What a match! The Champions League final was absolutely incredible. Best football game I've seen this year! #Football #Soccer",
     timestamp: "10m",
   },
+  {
+    id: "4",
+    author: {
+      name: "Tech Observer",
+      handle: "techwatch",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tech",
+    },
+    content: "The latest developments in AI and robotics are revolutionizing healthcare. Amazing to see technology saving lives! #AI #Healthcare",
+    timestamp: "15m",
+  },
+  {
+    id: "5",
+    author: {
+      name: "Political Analyst",
+      handle: "polanalyst",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Politics",
+    },
+    content: "Breaking: Major policy changes announced in Congress today. This could reshape the political landscape. #Politics #Congress",
+    timestamp: "20m",
+  },
+  {
+    id: "6",
+    author: {
+      name: "Sports Update",
+      handle: "sports247",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sports",
+    },
+    content: "The football transfer window is heating up! Some massive deals expected this summer. #Football #Transfers",
+    timestamp: "25m",
+  }
 ];
 
 const Index = () => {

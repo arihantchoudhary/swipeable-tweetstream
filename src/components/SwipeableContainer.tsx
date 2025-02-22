@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { TweetCard } from "./TweetCard";
+import { toast } from "sonner";
 
 interface SwipeableContainerProps {
   tweets: Array<{
@@ -19,6 +20,7 @@ export function SwipeableContainer({ tweets }: SwipeableContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [swipeAmount, setSwipeAmount] = useState(0);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
@@ -26,24 +28,29 @@ export function SwipeableContainer({ tweets }: SwipeableContainerProps) {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     setTouchEnd(e.targetTouches[0].clientX);
+    const diff = touchStart - e.targetTouches[0].clientX;
+    setSwipeAmount(-diff);
   };
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
 
     const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
+    const isLeftSwipe = distance > 100;
+    const isRightSwipe = distance < -100;
 
     if (isLeftSwipe && currentIndex < tweets.length - 1) {
       setCurrentIndex(curr => curr + 1);
+      toast.error("Tweet disliked!");
     }
-    if (isRightSwipe && currentIndex > 0) {
-      setCurrentIndex(curr => curr - 1);
+    if (isRightSwipe && currentIndex < tweets.length - 1) {
+      setCurrentIndex(curr => curr + 1);
+      toast.success("Tweet liked!");
     }
 
     setTouchStart(0);
     setTouchEnd(0);
+    setSwipeAmount(0);
   };
 
   const handleKeyPress = (e: KeyboardEvent) => {
@@ -70,7 +77,7 @@ export function SwipeableContainer({ tweets }: SwipeableContainerProps) {
       <div className="relative w-full max-w-xl">
         {tweets[currentIndex] && (
           <div className="animate-fade-in">
-            <TweetCard tweet={tweets[currentIndex]} />
+            <TweetCard tweet={tweets[currentIndex]} swipeAmount={swipeAmount} />
           </div>
         )}
         <div className="absolute bottom-[-60px] left-0 right-0 flex justify-center space-x-2">
