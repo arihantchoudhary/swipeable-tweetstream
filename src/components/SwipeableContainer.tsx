@@ -1,7 +1,8 @@
-
 import { useEffect, useState } from "react";
 import { TweetCard } from "./TweetCard";
 import { toast } from "sonner";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface SwipeableContainerProps {
   tweets: Array<{
@@ -62,6 +63,20 @@ export function SwipeableContainer({ tweets }: SwipeableContainerProps) {
     }
   };
 
+  const handleLike = () => {
+    if (currentIndex < tweets.length - 1) {
+      setCurrentIndex(curr => curr + 1);
+      toast.success("Tweet liked!");
+    }
+  };
+
+  const handleDislike = () => {
+    if (currentIndex < tweets.length - 1) {
+      setCurrentIndex(curr => curr + 1);
+      toast.error("Tweet disliked!");
+    }
+  };
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
@@ -76,9 +91,31 @@ export function SwipeableContainer({ tweets }: SwipeableContainerProps) {
     >
       <div className="relative w-full max-w-xl">
         {tweets[currentIndex] && (
-          <div className="animate-fade-in">
-            <TweetCard tweet={tweets[currentIndex]} swipeAmount={swipeAmount} />
-          </div>
+          <>
+            <div className="animate-fade-in">
+              <TweetCard tweet={tweets[currentIndex]} swipeAmount={swipeAmount} />
+            </div>
+            <div className="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-16">
+              <Button 
+                variant="outline"
+                size="icon"
+                className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border-twitter-border hover:bg-red-50 hover:text-red-500 transition-colors"
+                onClick={handleDislike}
+              >
+                <ThumbsDown className="w-6 h-6" />
+              </Button>
+            </div>
+            <div className="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-16">
+              <Button 
+                variant="outline"
+                size="icon"
+                className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm border-twitter-border hover:bg-green-50 hover:text-green-500 transition-colors"
+                onClick={handleLike}
+              >
+                <ThumbsUp className="w-6 h-6" />
+              </Button>
+            </div>
+          </>
         )}
         <div className="absolute bottom-[-60px] left-0 right-0 flex justify-center space-x-2">
           {tweets.map((_, idx) => (
