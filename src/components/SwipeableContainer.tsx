@@ -15,9 +15,10 @@ interface SwipeableContainerProps {
     content: string;
     timestamp: string;
   }>;
+  onLike?: (tweet: any) => void;
 }
 
-export function SwipeableContainer({ tweets }: SwipeableContainerProps) {
+export function SwipeableContainer({ tweets, onLike }: SwipeableContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -65,6 +66,12 @@ export function SwipeableContainer({ tweets }: SwipeableContainerProps) {
 
   const handleLike = () => {
     if (currentIndex < tweets.length - 1) {
+      if (onLike) {
+        onLike(tweets[currentIndex]);
+        // Store in localStorage for the Likes page
+        const savedTweets = JSON.parse(localStorage.getItem('likedTweets') || '[]');
+        localStorage.setItem('likedTweets', JSON.stringify([...savedTweets, tweets[currentIndex]]));
+      }
       setCurrentIndex(curr => curr + 1);
       toast.success("Tweet liked!");
     }

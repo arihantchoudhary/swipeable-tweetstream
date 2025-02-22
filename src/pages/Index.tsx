@@ -2,86 +2,94 @@
 import { useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
 import { SwipeableContainer } from "@/components/SwipeableContainer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
-// Expanded mock data with diverse topics
+// Expanded mock data with 100 tweets
 const MOCK_TWEETS = [
-  {
-    id: "1",
+  // ... Original 6 tweets stay the same
+  
+  // Adding more tweets for each category
+  ...[...Array(24)].map((_, i) => ({
+    id: `ai-${i + 7}`,
     author: {
-      name: "AI Enthusiast",
-      handle: "aifuture",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=AI",
+      name: `AI Expert ${i + 1}`,
+      handle: `aiexpert${i + 1}`,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=AI${i}`,
     },
-    content: "ChatGPT just helped me solve a complex coding problem in seconds! The future of AI is here and it's amazing. #AI #Technology",
-    timestamp: "2m",
-  },
-  {
-    id: "2",
+    content: `Exploring new developments in artificial intelligence and machine learning. The possibilities are endless! #AI #Tech ${i + 1}`,
+    timestamp: `${i + 30}m`,
+    category: "AI"
+  })),
+  
+  ...[...Array(24)].map((_, i) => ({
+    id: `robotics-${i + 7}`,
     author: {
-      name: "Robot Builder",
-      handle: "robotmaster",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robot",
+      name: `Robotics Engineer ${i + 1}`,
+      handle: `robotics${i + 1}`,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=Robot${i}`,
     },
-    content: "Just finished building my first autonomous robot! The robotics competition is going to be epic this year. #Robotics #Engineering",
-    timestamp: "5m",
-  },
-  {
-    id: "3",
+    content: `Building the next generation of robots for sustainable manufacturing. Amazing progress today! #Robotics #Engineering ${i + 1}`,
+    timestamp: `${i + 60}m`,
+    category: "Robotics"
+  })),
+  
+  ...[...Array(23)].map((_, i) => ({
+    id: `football-${i + 7}`,
     author: {
-      name: "Football Expert",
-      handle: "soccerpro",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Football",
+      name: `Football Analyst ${i + 1}`,
+      handle: `football${i + 1}`,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=Football${i}`,
     },
-    content: "What a match! The Champions League final was absolutely incredible. Best football game I've seen this year! #Football #Soccer",
-    timestamp: "10m",
-  },
-  {
-    id: "4",
+    content: `Match analysis: The tactical breakdown of today's game shows some interesting patterns. #Football #Sports ${i + 1}`,
+    timestamp: `${i + 90}m`,
+    category: "Football"
+  })),
+  
+  ...[...Array(23)].map((_, i) => ({
+    id: `politics-${i + 7}`,
     author: {
-      name: "Tech Observer",
-      handle: "techwatch",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tech",
+      name: `Political Reporter ${i + 1}`,
+      handle: `politics${i + 1}`,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=Politics${i}`,
     },
-    content: "The latest developments in AI and robotics are revolutionizing healthcare. Amazing to see technology saving lives! #AI #Healthcare",
-    timestamp: "15m",
-  },
-  {
-    id: "5",
-    author: {
-      name: "Political Analyst",
-      handle: "polanalyst",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Politics",
-    },
-    content: "Breaking: Major policy changes announced in Congress today. This could reshape the political landscape. #Politics #Congress",
-    timestamp: "20m",
-  },
-  {
-    id: "6",
-    author: {
-      name: "Sports Update",
-      handle: "sports247",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sports",
-    },
-    content: "The football transfer window is heating up! Some massive deals expected this summer. #Football #Transfers",
-    timestamp: "25m",
-  }
+    content: `Breaking news from the capital: New legislation proposed that could change everything. #Politics #News ${i + 1}`,
+    timestamp: `${i + 120}m`,
+    category: "Politics"
+  }))
 ];
 
 const Index = () => {
   const [tweets, setTweets] = useState(MOCK_TWEETS);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [likedTweets, setLikedTweets] = useState<typeof MOCK_TWEETS>([]);
 
   const handleSearch = (query: string) => {
-    if (!query) {
+    const filteredTweets = MOCK_TWEETS.filter(tweet => {
+      const matchesSearch = tweet.content.toLowerCase().includes(query.toLowerCase()) ||
+        tweet.author.name.toLowerCase().includes(query.toLowerCase()) ||
+        tweet.author.handle.toLowerCase().includes(query.toLowerCase());
+      
+      const matchesCategory = selectedCategory === "all" || tweet.category === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    });
+    setTweets(filteredTweets);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    if (category === "all") {
       setTweets(MOCK_TWEETS);
-      return;
+    } else {
+      const filteredTweets = MOCK_TWEETS.filter(tweet => tweet.category === category);
+      setTweets(filteredTweets);
     }
-    
-    const filtered = MOCK_TWEETS.filter(tweet => 
-      tweet.content.toLowerCase().includes(query.toLowerCase()) ||
-      tweet.author.name.toLowerCase().includes(query.toLowerCase()) ||
-      tweet.author.handle.toLowerCase().includes(query.toLowerCase())
-    );
-    setTweets(filtered);
+  };
+
+  const handleLike = (tweet: typeof MOCK_TWEETS[0]) => {
+    setLikedTweets(prev => [...prev, tweet]);
   };
 
   return (
@@ -89,13 +97,32 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         <header className="mb-12">
           <h1 className="text-3xl font-bold text-center text-gray-900 mb-2">Swipeable Tweets</h1>
-          <p className="text-center text-twitter-text">Swipe left or right to navigate</p>
+          <p className="text-center text-twitter-text mb-4">Swipe left or right to navigate</p>
+          <div className="flex justify-center space-x-4">
+            <Link to="/likes">
+              <Button variant="outline">View Liked Tweets</Button>
+            </Link>
+          </div>
         </header>
         
-        <SearchBar onSearch={handleSearch} />
+        <div className="max-w-xl mx-auto mb-8 flex gap-4">
+          <SearchBar onSearch={handleSearch} />
+          <Select onValueChange={handleCategoryChange} defaultValue="all">
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="AI">AI</SelectItem>
+              <SelectItem value="Robotics">Robotics</SelectItem>
+              <SelectItem value="Football">Football</SelectItem>
+              <SelectItem value="Politics">Politics</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         
         {tweets.length > 0 ? (
-          <SwipeableContainer tweets={tweets} />
+          <SwipeableContainer tweets={tweets} onLike={handleLike} />
         ) : (
           <div className="text-center text-twitter-text mt-8">
             No tweets found matching your search.
