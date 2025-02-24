@@ -6,7 +6,6 @@ import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Twitter, Facebook, Instagram, ThumbsUp } from "lucide-react";
 
 interface Post {
@@ -28,9 +27,8 @@ const Scroll = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    checkAuth();
-    // Mock data - in real implementation, this would fetch from social media APIs
-    const mockPosts = [
+    // Mock data - in real implementation, this would fetch from blockchain/APIs
+    const mockPosts: Post[] = [
       {
         id: "1",
         content: "Excited to share our latest AI research! #MachineLearning #Innovation",
@@ -72,13 +70,6 @@ const Scroll = () => {
     setPosts(mockPosts);
   }, []);
 
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      navigate('/auth');
-    }
-  };
-
   const handlePlatformToggle = (values: string[]) => {
     setSelectedPlatforms(values.length ? values : ["twitter", "facebook", "instagram"]);
   };
@@ -87,6 +78,9 @@ const Scroll = () => {
     setPosts(posts.map(post => 
       post.id === postId ? { ...post, liked: !post.liked } : post
     ));
+    // In future blockchain implementation:
+    // - Store likes on-chain for transparency
+    // - Emit events for social graph updates
   };
 
   const getPlatformIcon = (platform: string) => {
