@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useNavigate } from "react-router-dom";
 import { Twitter, Facebook, Instagram, ThumbsUp } from "lucide-react";
+import { useWeb3Auth } from "@/contexts/Web3AuthContext";
 
 interface Post {
   id: string;
@@ -23,11 +23,16 @@ interface Post {
 
 const Scroll = () => {
   const navigate = useNavigate();
+  const { isConnected } = useWeb3Auth();
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["twitter", "facebook", "instagram"]);
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    // Mock data - in real implementation, this would fetch from blockchain/APIs
+    if (!isConnected) {
+      navigate('/auth');
+      return;
+    }
+
     const mockPosts: Post[] = [
       {
         id: "1",
@@ -68,7 +73,7 @@ const Scroll = () => {
     ];
 
     setPosts(mockPosts);
-  }, []);
+  }, [isConnected, navigate]);
 
   const handlePlatformToggle = (values: string[]) => {
     setSelectedPlatforms(values.length ? values : ["twitter", "facebook", "instagram"]);
