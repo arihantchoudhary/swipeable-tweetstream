@@ -1,21 +1,14 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { createConfig, configureChains, WagmiConfig } from 'wagmi';
+import { createConfig, WagmiConfig, http } from 'wagmi';
 import { mainnet, polygon } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-
-const { chains, publicClient } = configureChains(
-  [mainnet, polygon],
-  [publicProvider()]
-);
 
 const config = createConfig({
-  autoConnect: true,
-  publicClient,
-  connectors: [
-    new MetaMaskConnector({ chains }),
-  ],
+  chains: [mainnet, polygon],
+  transports: {
+    [mainnet.id]: http(),
+    [polygon.id]: http(),
+  },
 });
 
 interface Web3AuthContextType {
