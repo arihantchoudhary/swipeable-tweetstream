@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Likes from "./pages/Likes";
+import Swipe from "./pages/Swipe";
+import Scroll from "./pages/Scroll";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +28,8 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/likes" element={<Likes />} />
+              <Route path="/swipe" element={<Swipe />} />
+              <Route path="/scroll" element={<Scroll />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
