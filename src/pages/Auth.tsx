@@ -10,7 +10,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (isConnected) {
-      navigate('/scroll');
+      navigate('/integrations');
     }
   }, [isConnected, navigate]);
 
@@ -33,6 +33,21 @@ const Auth = () => {
           >
             Connect Wallet
           </Button>
+          
+          <div className="flex flex-col space-y-2">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/integrations')}
+            >
+              Configure Social Media Accounts
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/categories')}
+            >
+              Choose Your Interests
+            </Button>
+          </div>
         </div>
       </div>
     </div>
