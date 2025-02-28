@@ -7,6 +7,7 @@ import Scroll from "@/pages/Scroll";
 import Swipe from "@/pages/Swipe";
 import SocialIntegrations from "@/pages/SocialIntegrations";
 import CategorySelection from "@/pages/CategorySelection";
+import Source from "@/pages/Source";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/swipe" element={<Swipe />} />
           <Route path="/integrations" element={<SocialIntegrations />} />
           <Route path="/categories" element={<CategorySelection />} />
+          <Route path="/source" element={<Source />} />
         </Routes>
       </Router>
       <Toaster position="top-right" />
