@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight, Twitter, Facebook, Instagram, Youtube, Twitch, LinkedIn, Github } from "lucide-react";
+import { ChevronLeft, ChevronRight, Twitter, Facebook, Instagram, Youtube, Twitch, Linkedin, Github } from "lucide-react";
 import { toast } from "sonner";
 
 interface Post {
@@ -26,7 +26,7 @@ const PLATFORMS = [
   { id: "instagram", icon: Instagram },
   { id: "youtube", icon: Youtube },
   { id: "twitch", icon: Twitch },
-  { id: "linkedin", icon: LinkedIn },
+  { id: "linkedin", icon: Linkedin },
   { id: "github", icon: Github }
 ];
 
